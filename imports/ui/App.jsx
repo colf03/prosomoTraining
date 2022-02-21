@@ -17,7 +17,7 @@ import {
 import { Hello } from "./Hello.jsx";
 import { Info } from "./Info.jsx";
 import { FormContact } from "./FormContact.jsx";
-
+import { NotFound } from "./NotFound.jsx";
 import { EditContact } from "./EditContact.jsx";
 import { Contact } from "./Contact.jsx";
 
@@ -60,6 +60,7 @@ export const App = () => (
 					<Route exact path="/contacts" element={<Contact />}></Route>
 					<Route exact path="/formContact" element={<FormContact />}></Route>
 					<Route path="/editContact/:id" element={<EditContact />} />
+					<Route path="/*" element={<NotFound />} />
 				</Routes>
 			</Router>
 		</div>

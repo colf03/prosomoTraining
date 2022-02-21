@@ -4,9 +4,9 @@ import { getUser } from "meteor/apollo";
 import { LinksCollection } from "/imports/api/links";
 import { ContactCollection } from "/imports/api/contact";
 import typeDefs from "/imports/apollo/schema.graphql";
+import { ObjectId } from "mongodb";
 
 const MongoClient = require("mongodb").MongoClient;
-
 const password = "gyPMaJneVMpD94";
 const username = "florian";
 const uri = `mongodb+srv://${username}:${password}@cluster0.n75dl.mongodb.net`;
@@ -28,6 +28,13 @@ const resolvers = {
 						return {value};
 					});
 				}
+			});
+
+		},
+		updateContact :  async (parent, { id, input}, { contact }, info) => {
+			contact.updateOne({_id : ObjectId(id)}, {$set : input}, function (error, response){
+				if(error)
+					console.log("Error occurred while updating : " + error);
 			});
 
 		},
