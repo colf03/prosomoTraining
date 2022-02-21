@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { AutoForm } from "uniforms-material";
 import { bridge as schema } from "../apollo/contactSchema";
 import { useQuery, useLazyQuery,  gql, useMutation } from "@apollo/client";
@@ -94,17 +94,26 @@ export class EditContact extends Component{
 
 }
 */
+
 export const EditContact = () => {
 		let  id  = useParams().id;
 		const [send, setSended] = useState("");
+
 		const sended = () =>{
 			setSended("Le contact a été mis à jour.");
 		}
+
 		const seeMessage = () =>{
 			setSended("");
 		}
 
-		const { loading, error, data } =  useQuery (GET_CONTACT, {variables : {id : id}});
+
+		const {loading, error, data, refetch } =  useQuery (GET_CONTACT, {variables : {id : id}});
+
+		useEffect(() => {
+			refetch();
+		}, []);
+
 		const [updateContact, { dataUpdate, loadingUpdate, errorUpdate }] = useMutation(UPDATE_CONTACT);
 		return (
 			<div>

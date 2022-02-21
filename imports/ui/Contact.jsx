@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -21,11 +21,19 @@ const GET_CONTACTS = gql`
     }
 `;
 
+
 export const Contact = () => {
-  const { loading, error, data } = useQuery(GET_CONTACTS);
+
+
+	const { loading, error, data , refetch} = useQuery(GET_CONTACTS);
+	useEffect(() => {
+		console.log("I have been mounted");
+		refetch();
+	}, []);
 
   if (loading) return <p>En cours de chargement ...</p>;
   if (error) return <p>Erreur ⁉️</p>;
+
 
   return (
     <div>
