@@ -1,0 +1,21 @@
+body {
+  padding: 10px;
+  font-family: sans-serif;
+}
+nav {
+	border: 1px;
+	color: white;
+	padding: 6px;
+	margin-bottom: 25px;
+}
+
+
+nav span {
+	text-decoration: none;
+	font-size: 20px;
+	padding: 0 20px;
+}
+
+.editContact {
+	cursor: pointer;
+}

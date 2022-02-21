@@ -1,0 +1,42 @@
+type Link {
+    _id: ID!
+    title: String
+    url: String
+}
+
+type Contact {
+    _id: ID!
+    firstName : String!
+    lastName : String!
+    email : String!
+    phone: String!
+    city : String!
+    province : String!
+    postalCode : String!
+    country : String!
+    comment : [String]
+}
+
+input ContactInput {
+    firstName : String!
+    lastName : String!
+    email : String!
+    phone: String!
+    city : String!
+    province : String!
+    postalCode : String!
+    country : String!
+    comment : [String]
+}
+
+type Query {
+    getLink (id: ID!): Link
+    getLinks: [Link]
+    getContact (id: ID!): Contact
+    getContacts: [Contact]
+}
+
+type Mutation {
+    createContact( input: ContactInput ) : Contact
+    updateContact(id: ID!, input: ContactInput): Contact
+}
