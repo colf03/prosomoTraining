@@ -37,12 +37,14 @@ const UPDATE_CONTACT = gql`
 
 
 
-
 export const EditContact = () => {
 		let  id  = useParams().id;
 		const [send, setSended] = useState("");
 		const sended = () =>{
-			setSended("Le contact  a été mis à jour.");
+			setSended("Le contact a été mis à jour.");
+		}
+		const seeMessage = () =>{
+			setSended("");
 		}
 
 		const { loading, error, data } =  useQuery (GET_CONTACT, {variables : {id : id}});
@@ -50,15 +52,19 @@ export const EditContact = () => {
 		return (
 			<div>
 				<AutoForm
+				ref={ref => {
+					fRef= ref;
+				  }}
 				placeholder={true}
 				schema={schema}
 				model={data?.getContact?data.getContact : []}
 				onSubmit={(value) =>  {
 					delete value['__typename'];
-					updateContact({ variables : { id: id, input : value}})
+					updateContact({ variables : { id: id, input : value}});
+					sended();
 				}}
 				/>
-				<p className="formResult">
+				<p className="formResult" onClick={seeMessage}>
 					{send}
 				</p>
 			</div>

@@ -25,7 +25,7 @@ export const FormContact = () => {
 	const [addContact, { data, loading, error }] = useMutation(ADD_CONTACT);
 	const [send, setSended] = useState("");
 	const sended = () =>{
-		setSended("Le contact  a été ajouté");
+		setSended("Le contact a été ajouté.");
 	}
 	return (
 		<div>
@@ -34,7 +34,6 @@ export const FormContact = () => {
 				schema={schema}
 				onSubmit={(model) =>{
 					addContact({ variables : {input : model}});
-					reset();
 					sended();
 				}}
 			>
