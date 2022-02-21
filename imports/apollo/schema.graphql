@@ -30,9 +30,9 @@ input ContactInput {
 }
 
 type Query {
-    getLink (id: ID!): Link
+    getLink (_id: ID!): Link
     getLinks: [Link]
-    getContact (id: ID!): Contact
+    getContact (_id: ID!): Contact
     getContacts: [Contact]
 }
 

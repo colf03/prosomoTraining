@@ -30,11 +30,15 @@ export const FormContact = () => {
 	return (
 		<div>
 			<AutoForm
+				ref={ref => {
+					fRef= ref;
+				}}
 				placeholder={true}
 				schema={schema}
 				onSubmit={(model) =>{
 					addContact({ variables : {input : model}});
 					sended();
+					fRef.reset();
 				}}
 			>
 			</AutoForm>

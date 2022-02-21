@@ -15,7 +15,8 @@ const resolvers = {
 	Query: {
 		getLink: async (obj, args, { links }, infos) => links.findOne(),
 		getLinks: async (obj, args, { links }, infos) => links.find().toArray(),
-		getContact: async (parent, args, { contact }, infos) => contact.findOne(),
+		getContact: async (parent, args, { contact }, infos) =>contact.findOne({"_id" :  ObjectId(args._id)}),
+
 		getContacts: async (parent, args, { contact }, infos) => contact.find().toArray(),
 	},
 	Mutation: {

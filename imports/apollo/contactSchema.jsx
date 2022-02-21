@@ -117,4 +117,4 @@ const validator = (model) => {
 
 const type = buildASTSchema(parse(schema)).getType("Contact");
 
-export const bridge = new GraphQLBridge(type, validator, args);
+export const bridge = new GraphQLBridge(type, validator);

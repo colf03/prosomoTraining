@@ -61,8 +61,8 @@ export const App = () => (
 					<Route exact path="/info" element={<Info />}></Route>
 					<Route exact path="/contacts" element={<Contact />}></Route>
 					<Route exact path="/formContact" element={<FormContact />}></Route>
-					<Route path="/editContact/:id" element={<EditContact />} />
-					<Route path="/*" element={<NotFound />} />
+					<Route path="/editContact/:id" element={<EditContact />}></Route>
+					<Route path="/*" element={<NotFound />}> </Route>
 				</Routes>
 			</Router>
 		</div>
