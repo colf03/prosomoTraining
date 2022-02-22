@@ -57,7 +57,6 @@ export const EditContact = () => {
 			if(error!=undefined)
 				navigate("/error-404");
 		}, [error]);
-
 		const [updateContact, { dataUpdate, loadingUpdate, errorUpdate }] = useMutation(UPDATE_CONTACT);
 
 		return (
@@ -71,7 +70,11 @@ export const EditContact = () => {
 				model={data?.getContact?data.getContact : []}
 				onSubmit={(value) =>  {
 					delete value['__typename'];
-					updateContact({ variables : { id: id, input : value}});
+					updateContact({ variables : { id: id, input : value}, update(cache){
+						const normalizedId = cache.identify({ id, __typename: 'Query' });
+						cache.evict({ id: normalizedId });
+						cache.gc();
+					}});
 					sended();
 					refetch();
 				}}

@@ -25,18 +25,18 @@ const resolvers = {
 				if (error)
 					console.log("Error occurred while inserting : " + error);
 				else{
-					contact.findOne({"_id" : response.insertedId}).then((value)=>{
-						return {value};
-					});
+					contact.findOne({"_id" : ObjectId(response.insertedId)});
 				}
 			});
 
 		},
 		updateContact :  async (parent, { id, input}, { contact }, info) => {
-			contact.updateOne({_id : ObjectId(id)}, {$set : input}, function (error, response){
+			await contact.updateOne({_id : ObjectId(id)}, {$set : input}, function (error, response){
 				if(error)
 					console.log("Error occurred while updating : " + error);
+
 			});
+			return await contact.findOne({"_id" : ObjectId(id)});
 
 		},
 		deleteContact : async (parent, {_id}, { contact }, info) => {

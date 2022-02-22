@@ -53,6 +53,6 @@ type Query {
 
 type Mutation {
     createContact( input: ContactInput ) : Contact
-    updateContact(id: ID!, input: ContactInput): Contact
+    updateContact(id: ID!, input: ContactInput):  Contact!
 	deleteContact (_id:ID!):  String
 }
