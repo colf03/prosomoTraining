@@ -19,6 +19,8 @@ const schema = `
   type Query { anything: ID }
 
 `;
+
+/* for normal schema
 const args = {
   firstName: {
     label: "Prénom",
@@ -61,6 +63,7 @@ const args = {
     required: false,
   },
 };
+*/
 
 const validator = (model) => {
   let regexPhone= new RegExp("^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}");
