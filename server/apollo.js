@@ -7,7 +7,7 @@ import typeDefs from "/imports/apollo/schema.graphql";
 import { ObjectId } from "mongodb";
 
 const MongoClient = require("mongodb").MongoClient;
-const password = "gyPMaJneVMpD94";
+const password = "0AJxFvH8CLDjSAuA";
 const username = "florian";
 const uri = `mongodb+srv://${username}:${password}@cluster0.n75dl.mongodb.net`;
 
