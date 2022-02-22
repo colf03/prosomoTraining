@@ -41,6 +41,8 @@ nav span a:hover{
 
 .editContact {
 	cursor: pointer;
+	color : #0000ff;
+	margin: 0 5px;
 }
 
 .formResult{

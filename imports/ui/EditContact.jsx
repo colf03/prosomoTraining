@@ -96,9 +96,11 @@ export class EditContact extends Component{
 */
 
 export const EditContact = () => {
-		let  id  = useParams().id;
+
+
 		const [send, setSended] = useState("");
 
+		const  id  = useParams().id;
 		const sended = () =>{
 			setSended("Le contact a été mis à jour.");
 		}
@@ -107,11 +109,9 @@ export const EditContact = () => {
 			setSended("");
 		}
 
-
 		const {loading, error, data, refetch } =  useQuery (GET_CONTACT, {variables : {id : id}});
 
 		useEffect(() => {
-			refetch();
 		}, []);
 
 		const [updateContact, { dataUpdate, loadingUpdate, errorUpdate }] = useMutation(UPDATE_CONTACT);

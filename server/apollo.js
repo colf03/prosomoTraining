@@ -13,11 +13,11 @@ const uri = `mongodb+srv://${username}:${password}@cluster0.n75dl.mongodb.net`;
 
 const resolvers = {
 	Query: {
-		getLink: async (obj, args, { links }, infos) => links.findOne(),
+		getLink: async (obj, args, { links }, infos) => links.findOne({"_id" :  ObjectId(args._id)}),
 		getLinks: async (obj, args, { links }, infos) => links.find().toArray(),
 		getContact: async (parent, args, { contact }, infos) =>contact.findOne({"_id" :  ObjectId(args._id)}),
-
 		getContacts: async (parent, args, { contact }, infos) => contact.find().toArray(),
+
 	},
 	Mutation: {
 		createContact: async (parent, { input}, { contact }, info) => {
@@ -36,6 +36,18 @@ const resolvers = {
 			contact.updateOne({_id : ObjectId(id)}, {$set : input}, function (error, response){
 				if(error)
 					console.log("Error occurred while updating : " + error);
+			});
+
+		},
+		deleteContact : async (parent, {_id}, { contact }, info) => {
+			contact.deleteOne({"_id" :  ObjectId(_id)}, function (error, response){
+
+				if (error)
+					console.log("Error occurred while deleting : " + error);
+				else{
+					return "Contact deleted";
+				}
+
 			});
 
 		},

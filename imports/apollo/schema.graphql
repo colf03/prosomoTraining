@@ -26,7 +26,7 @@ input ContactInput {
     province : String!
     postalCode : String!
     country : String!
-    comment : [String]
+    comment : [String] = []
 }
 
 type Query {
@@ -39,4 +39,5 @@ type Query {
 type Mutation {
     createContact( input: ContactInput ) : Contact
     updateContact(id: ID!, input: ContactInput): Contact
+	deleteContact (_id:ID!):  String
 }

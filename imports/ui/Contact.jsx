@@ -1,8 +1,8 @@
-import React, {useEffect } from 'react';
-import { useQuery, gql } from '@apollo/client';
+import React, {useEffect, useState } from 'react';
+import { useQuery, gql, useMutation } from '@apollo/client';
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import { faPencilAlt } from '@fortawesome/fontawesome-free-solid';
+import { faPencilAlt, faTrashAlt } from '@fortawesome/fontawesome-free-solid';
 import {Link} from "react-router-dom";
 const GET_CONTACTS = gql`
     {
@@ -21,18 +21,29 @@ const GET_CONTACTS = gql`
     }
 `;
 
+const DELETE_CONTACT = gql`
+	mutation deleteContact($id : ID!) {
+		deleteContact(_id : $id)
+	}
+`;
+
 
 export const Contact = () => {
 
-
 	const { loading, error, data , refetch} = useQuery(GET_CONTACTS);
+	const [deleteContactMutation, { dataDelete, loadingDelete, errorDelete }] = useMutation(DELETE_CONTACT);
 	useEffect(() => {
-		console.log("I have been mounted");
+		//console.log("I have been mounted");
 		refetch();
 	}, []);
 
-  if (loading) return <p>En cours de chargement ...</p>;
-  if (error) return <p>Erreur ⁉️</p>;
+	if (loading) return <p>En cours de chargement ...</p>;
+	if (error) return <p>Erreur ⁉️</p>;
+
+	function deleteContact (id){
+		deleteContactMutation({ variables : { id: id}});
+		refetch();
+	}
 
 
   return (
@@ -56,7 +67,8 @@ export const Contact = () => {
         <TableBody>
       	{data?.contacts?.map( row =>
         <TableRow
-		key={row._id}
+		key={'contact_'+row._id}
+		id={row._id}
 		sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
 	  	>
 		<TableCell component="th" scope="row">
@@ -75,6 +87,7 @@ export const Contact = () => {
 		</TableCell>
 		<TableCell>
 			 <Link to={"/editContact/"+row._id} ><span className='editContact' title='Modifier le contact' ><FontAwesomeIcon icon={faPencilAlt} /></span></Link>
+			 <span className='editContact' title='Supprimer le contact' onClick={()=> deleteContact(row._id)} ><FontAwesomeIcon icon={faTrashAlt} /></span>
 		</TableCell>
 	  </TableRow>
       )}
