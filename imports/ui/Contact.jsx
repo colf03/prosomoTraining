@@ -30,11 +30,9 @@ const DELETE_CONTACT = gql`
 
 export const Contact = () => {
 
-	const { loading, error, data , refetch} = useQuery(GET_CONTACTS);
+	export const { loading, error, data , refetch} = useQuery(GET_CONTACTS);
 	const [deleteContactMutation, { dataDelete, loadingDelete, errorDelete }] = useMutation(DELETE_CONTACT);
 	useEffect(() => {
-		//console.log("I have been mounted");
-		refetch();
 	}, []);
 
 	if (loading) return <p>En cours de chargement ...</p>;

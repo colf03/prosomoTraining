@@ -3,6 +3,7 @@ import { AutoForm } from "uniforms-material";
 import { bridge as schema } from "../apollo/contactSchema";
 import { useQuery, useLazyQuery,  gql, useMutation } from "@apollo/client";
 import {useParams} from "react-router-dom";
+import {refetch} from "./Contact.jsx"
 const GET_CONTACT = gql`
 query GetContact ($id: ID!){
 	getContact (_id : $id){
@@ -109,7 +110,7 @@ export const EditContact = () => {
 			setSended("");
 		}
 
-		const {loading, error, data, refetch } =  useQuery (GET_CONTACT, {variables : {id : id}});
+		const {loading, error, data} =  useQuery (GET_CONTACT, {variables : {id : id}});
 
 		useEffect(() => {
 		}, []);
@@ -128,6 +129,7 @@ export const EditContact = () => {
 					delete value['__typename'];
 					updateContact({ variables : { id: id, input : value}});
 					sended();
+					refetch();
 				}}
 				/>
 				<p className="formResult" onClick={seeMessage}>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { AutoForm, TextField, SubmitField } from 'uniforms-material';
 import { bridge as schema } from "../apollo/contactSchema";
 import { useQuery, gql, useMutation } from "@apollo/client";
-
+import {refetch} from "./Contact.jsx"
 const ADD_CONTACT = gql`
 	mutation CreateContact($input: ContactInput) {
 		createContact(input : $input) {
@@ -39,6 +39,7 @@ export const FormContact = () => {
 					addContact({ variables : {input : model}});
 					sended();
 					fRef.reset();
+					refetch();
 				}}
 			>
 			</AutoForm>
