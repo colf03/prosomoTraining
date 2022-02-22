@@ -2,9 +2,12 @@ body {
   padding: 10px;
   font-family: sans-serif;
 }
+.App-header{
+	margin-bottom: 60px;
+}
 nav {
 	border: 1px;
-	color: white;
+	color: #ffff;
 	padding: 6px;
 	margin-bottom: 25px;
 }
@@ -15,7 +18,37 @@ nav span {
 	font-size: 20px;
 	padding: 0 20px;
 }
+nav span a {
+	text-decoration: none;
+	cursor: pointer;
+	color:rgb(10, 166, 228)
+}
+nav span a:hover{
+	text-decoration:none;
+    cursor:pointer;
+}
+.linkButton a{
+	color: #ffff;
+    text-decoration: none;
+    font-weight: 700;
+}
+.home{
+	text-align: center;
+}
+.home .logo{
+	max-width: 350px;;
+}
 
 .editContact {
 	cursor: pointer;
+	color : #0000ff;
+	margin: 0 5px;
+}
+
+.formResult{
+	text-align: center;
+	font-size: 16px;
+	cursor: pointer;
+	font-weight: 700;
+	color: rgb(52, 192, 24);
 }

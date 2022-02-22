@@ -1,12 +1,13 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { AutoForm } from "uniforms-material";
 import { bridge as schema } from "../apollo/contactSchema";
 import { useQuery, useLazyQuery,  gql, useMutation } from "@apollo/client";
 import {useParams} from "react-router-dom";
-import  { Redirect } from 'react-router-dom'
+import {refetch} from "./Contact.jsx"
+import { useNavigate } from "react-router-dom";
 const GET_CONTACT = gql`
 query GetContact ($id: ID!){
-	getContact (id : $id){
+	getContact (_id : $id){
 		firstName
 		lastName
 		email
@@ -19,9 +20,9 @@ query GetContact ($id: ID!){
 	}
 }`;
 
-const ADD_CONTACT = gql`
-	mutation CreateContact($input: ContactInput) {
-		createContact(input : $input) {
+const UPDATE_CONTACT = gql`
+	mutation UpdateContact($id : ID!, $input: ContactInput) {
+		updateContact(id : $id, input : $input) {
 			firstName
 			lastName
 			email
@@ -35,25 +36,52 @@ const ADD_CONTACT = gql`
 	}
 `;
 
-
-
-
 export const EditContact = () => {
-		let  id  = useParams().id;
-		console.log(id);
-		//const [addContact, { data, loading, error }] = useMutation(ADD_CONTACT);
-		const { loading, error, data } =  useQuery (GET_CONTACT, {variables : {id : id}});
+
+		const navigate = useNavigate();
+		const [send, setSended] = useState("");
+
+		const  id  = useParams().id;
+		const sended = () =>{
+			setSended("Le contact a été mis à jour.");
+		}
+
+		const seeMessage = () =>{
+			setSended("");
+		}
+		const dataNotFound=0;
+		const {loading, error, data} =  useQuery (GET_CONTACT, {variables : {id : id}});
+
+
+		useEffect( async () => {
+			if(error!=undefined)
+				navigate("/error-404");
+		}, [error]);
+		const [updateContact, { dataUpdate, loadingUpdate, errorUpdate }] = useMutation(UPDATE_CONTACT);
+
 		return (
 			<div>
 				<AutoForm
+				ref={ref => {
+					fRef= ref;
+				  }}
 				placeholder={true}
 				schema={schema}
 				model={data?.getContact?data.getContact : []}
-				onSubmit={(model) =>
-					console.log(model)
-					//addContact({ variables : {input : model}})
-				}
+				onSubmit={(value) =>  {
+					delete value['__typename'];
+					updateContact({ variables : { id: id, input : value}, update(cache){
+						const normalizedId = cache.identify({ id, __typename: 'Query' });
+						cache.evict({ id: normalizedId });
+						cache.gc();
+					}});
+					sended();
+					refetch();
+				}}
 				/>
+				<p className="formResult" onClick={seeMessage}>
+					{send}
+				</p>
 			</div>
 		);
 };

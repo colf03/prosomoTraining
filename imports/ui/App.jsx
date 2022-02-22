@@ -17,7 +17,7 @@ import {
 import { Hello } from "./Hello.jsx";
 import { Info } from "./Info.jsx";
 import { FormContact } from "./FormContact.jsx";
-
+import { NotFound } from "./NotFound.jsx";
 import { EditContact } from "./EditContact.jsx";
 import { Contact } from "./Contact.jsx";
 
@@ -32,7 +32,9 @@ const link = ApolloLink.from([
 
 const client = new ApolloClient({
 	uri: "/graphql",
-	cache,
+	cache: new InMemoryCache({
+		addTypename: false
+	  }),
 	link,
 });
 
@@ -59,7 +61,8 @@ export const App = () => (
 					<Route exact path="/info" element={<Info />}></Route>
 					<Route exact path="/contacts" element={<Contact />}></Route>
 					<Route exact path="/formContact" element={<FormContact />}></Route>
-					<Route path="/editContact/:id" element={<EditContact />} />
+					<Route path="/editContact/:id" element={<EditContact />}></Route>
+					<Route path="/*" element={<NotFound />}> </Route>
 				</Routes>
 			</Router>
 		</div>
