@@ -17,6 +17,21 @@ type Contact {
     comment : [String]
 }
 
+
+type ContactResult {
+
+	success: Boolean!
+    errors: [String]
+    contact : Contact
+}
+
+type ContactsResult {
+
+	success: Boolean!
+    errors: [String]
+    contact : [Contact]
+}
+
 input ContactInput {
     firstName : String!
     lastName : String!
