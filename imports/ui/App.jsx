@@ -14,6 +14,7 @@ import {
 	Routes,
 	Link,
 } from "react-router-dom";
+import { onPageLoad } from 'meteor/server-render';
 import { Hello } from "./Hello.jsx";
 import { Info } from "./Info.jsx";
 import { FormContact } from "./FormContact.jsx";
@@ -68,3 +69,6 @@ export const App = () => (
 		</div>
 	</ApolloProvider>
 );
+onPageLoad(() => {
+	ReactDOM.hydrate(<App />, document.getElementById('react-target'));
+  });
