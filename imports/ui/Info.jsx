@@ -13,8 +13,6 @@ const GET_LINKS = gql`
 export const Info = () => {
   const { loading, error, data } = useQuery(GET_LINKS);
 
-  if (loading) return <p>En cours de chargement...</p>;
-  if (error) return <p>Erreur ⁉️</p>;
 
   return (
     <div>

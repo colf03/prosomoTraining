@@ -34,10 +34,6 @@ export const Contact = () => {
 	const [deleteContactMutation, { dataDelete, loadingDelete, errorDelete }] = useMutation(DELETE_CONTACT);
 	useEffect(() => {
 	}, []);
-
-	if (loading) return <p>En cours de chargement ...</p>;
-	if (error) return <p>Erreur ⁉️</p>;
-
 	function deleteContact (id){
 		deleteContactMutation({ variables : { id: id}});
 		refetch();
