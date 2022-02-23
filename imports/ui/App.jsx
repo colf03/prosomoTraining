@@ -1,10 +1,12 @@
 import React from "react";
+import ReactDOM from 'react-dom';
 import {
 	InMemoryCache,
 	ApolloProvider,
 	ApolloClient,
 	ApolloLink,
 } from "@apollo/client";
+import { onPageLoad } from 'meteor/server-render';
 import { BatchHttpLink } from "@apollo/client/link/batch-http";
 // import { MeteorAccountsLink } from 'meteor/apollo'
 import {
@@ -14,7 +16,6 @@ import {
 	Routes,
 	Link,
 } from "react-router-dom";
-import { onPageLoad } from 'meteor/server-render';
 import { Hello } from "./Hello.jsx";
 import { Info } from "./Info.jsx";
 import { FormContact } from "./FormContact.jsx";
