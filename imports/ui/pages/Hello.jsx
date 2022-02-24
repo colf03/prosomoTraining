@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Image } from 'mui-image'
-export const Hello = () => {
+import { Helmet } from "react-helmet-async";
+ const Hello = () => {
   const [counter, setCounter] = useState(0);
 
   const increment = () => {
@@ -14,3 +15,5 @@ export const Hello = () => {
 	</div>
   );
 };
+
+export default Hello;
