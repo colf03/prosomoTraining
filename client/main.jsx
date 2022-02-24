@@ -1,8 +1,11 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import { App } from '/imports/ui/App';
+import React from "react";
+import App from "../imports/both/App";
+import { onPageLoad } from "meteor/server-render";
+import getApolloClient from "../imports/both/apolloClient";
+import { hydrate } from "react-dom";
 
-Meteor.startup(() => {
-  render(<App/>, document.getElementById('react-target'));
-});
+const client = getApolloClient();
+
+onPageLoad((sink) =>
+  hydrate(<App client={client} />, document.getElementById("app"))
+);
