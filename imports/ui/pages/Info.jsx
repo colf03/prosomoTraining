@@ -25,8 +25,9 @@ const GET_LINKS = gql`
 const Info = () => {
   const { loading, error, data } = useQuery(GET_LINKS);
 
+
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error ⁉️</p>;
+  if (error) return <p>error</p>;
 
   return (
     <>

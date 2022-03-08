@@ -48,7 +48,7 @@ type Query {
     getLink (_id: ID!): Link
     getLinks: [Link]
     getContact (_id: ID!): Contact
-    getContacts: [Contact]
+    getContacts (limit: Int, offset: Int): [Contact]
 }
 
 type Mutation {

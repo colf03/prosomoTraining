@@ -15,7 +15,24 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 const GET_CONTACTS = gql`
 	{
-		contacts: getContacts {
+		contacts: getContacts{
+			_id
+			firstName
+			lastName
+			email
+			phone
+			city
+			province
+			postalCode
+			country
+			comment
+		}
+	}
+`;
+
+const GET_CONTACTS_PAGINATION = gql`
+	query getContacts($limit: Int, $offset: Int){
+		getContacts( limit: $limit, offset: $offset){
 			_id
 			firstName
 			lastName
@@ -37,9 +54,13 @@ const DELETE_CONTACT = gql`
 `;
 
 const Contact = () => {
-	export const { loading, error, data, refetch } = useQuery(GET_CONTACTS);
-	const [deleteContactMutation, { dataDelete, loadingDelete, errorDelete }] =
-		useMutation(DELETE_CONTACT);
+	const OFFSET = 0;
+	const ITEMS_PER_PAGE = 5;
+
+	const  { loading, error, data, refetch }  = useQuery(GET_CONTACTS);
+	const [deleteContactMutation, { dataDelete, loadingDelete, errorDelete }] = useMutation(DELETE_CONTACT);
+
+
 	useEffect(() => {}, []);
 	function deleteContact(id) {
 		deleteContactMutation({ variables: { id: id } });

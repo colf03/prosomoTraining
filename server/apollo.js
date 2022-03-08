@@ -1,71 +1,46 @@
 import { ApolloServer } from "apollo-server-express";
 import { WebApp } from "meteor/webapp";
 import { getUser } from "meteor/apollo";
-import { LinksCollection } from "/imports/api/links";
 import typeDefs from "/imports/apollo/schema.graphql";
 import { ObjectId } from "mongodb";
-
+import Contact from "../imports/api/Contact";
+import Link from "../imports/api/Link";
 const MongoClient = require("mongodb").MongoClient;
 const password = "0AJxFvH8CLDjSAuA";
 const username = "florian";
 const uri = `mongodb+srv://${username}:${password}@cluster0.n75dl.mongodb.net`;
+
+const dbClient = new MongoClient(uri);
+await dbClient.connect();
+const db= dbClient.db('training');
+
 const resolvers = {
 	Query: {
-		getLink: async (obj, args, { links }, infos) =>links.findOne({ _id: args._id }),
-		getLinks: async (obj, args, { links }, infos) => links.find().toArray(),
-		getContact: async (parent, args, { contact }, infos) =>contact.findOne({ _id: ObjectId(args._id) }),
-		getContacts: async (parent, args, { contact }, infos) =>contact.find().toArray(),
+		getLink: async (obj, args, context, infos) =>context.dataSources.linkDataSource.getLink(args._id),
+		getLinks: async (obj, args, context, infos) => context.dataSources.linkDataSource.getLinks(),
+		getContact: async (obj, args, context) => context.dataSources.contactDataSource.getContact(args._id),
+		getContacts: async  (obj, args, context, info ) => context.dataSources.contactDataSource.getContacts()
 	},
 	Mutation: {
-		createContact: async (parent, { input }, { contact }, info) => {
-			contact.insertOne(input, function (error, response) {
-				if (error)
-					console.log("Error occurred while inserting : " + error);
-				else {
-					contact.findOne({ _id: ObjectId(response.insertedId) });
-				}
-			});
-		},
-		updateContact: async (parent, { id, input }, { contact }, info) => {
-			await contact.updateOne(
-				{ _id: ObjectId(id) },
-				{ $set: input },
-				function (error, response) {
-					if (error)
-						console.log("Error occurred while updating : " + error);
-				}
-			);
-			return await contact.findOne({ _id: ObjectId(id) });
-		},
-		deleteContact: async (parent, { _id }, { contact }, info) => {
-			contact.deleteOne(
-				{ _id: ObjectId(_id) },
-				function (error, response) {
-					if (error)
-						console.log("Error occurred while deleting : " + error);
-					else {
-						return "Contact deleted";
-					}
-				}
-			);
-		},
+		createContact: async (parent, { input }, context, info) =>context.dataSources.contactDataSource.createContact(input),
+		updateContact: async (parent, { id, input }, context, info) =>context.dataSources.contactDataSource.updateContact(id,input),
+		deleteContact: async (parent, { _id }, context, info) =>context.dataSources.contactDataSource.deleteContact(_id),
 	},
+
 };
 
 const server = new ApolloServer({
 	typeDefs,
 	resolvers,
+	dataSources: () => ({
+		contactDataSource : new Contact(db.collection('Contact')),
+		linkDataSource : new Link(db.collection('links')),
+		//var test = await contactDataSource.getContact('6216517dd2dc21c9170058cb');
+		//var test = await contactDataSource.getContacts();
+		//console.log (test);
+	}),
 	context: async ({ req }) => {
-		const user = await getUser(req.headers.authorization);
-		const dbClient = new MongoClient(uri);
-		await dbClient.connect();
-		db = dbClient.db("training");
-
-		var contact = db.collection("Contact");
-		var links = db.collection("links");
-
-		return { db, contact, links };
-	},
+	}
 });
 
 server.applyMiddleware({

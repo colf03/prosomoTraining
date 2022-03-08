@@ -80,14 +80,6 @@ const EditContact = () => {
 						delete value["__typename"];
 						updateContact({
 							variables: { id: id, input: value },
-							update(cache) {
-								const normalizedId = cache.identify({
-									id,
-									__typename: "Query",
-								});
-								cache.evict({ id: normalizedId });
-								cache.gc();
-							},
 						});
 						sended();
 						refetch();
