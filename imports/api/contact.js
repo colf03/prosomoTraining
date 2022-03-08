@@ -14,6 +14,14 @@ export default class Contact extends MongoDataSource {
 	async getContacts() {
 		return this.findByFields({});
   	}
+	async getContactsPagination(limit, offset) {
+		return this.collection.find().skip(offset).limit(limit).toArray();
+  	}
+
+	async getMaxContacts (){
+		var res= await this.findByFields({});
+		return (res.length);
+	}
 
 	async updateContact (id, contact){
 		this.deleteFromCacheById(id);

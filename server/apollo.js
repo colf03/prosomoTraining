@@ -19,7 +19,9 @@ const resolvers = {
 		getLink: async (obj, args, context, infos) =>context.dataSources.linkDataSource.getLink(args._id),
 		getLinks: async (obj, args, context, infos) => context.dataSources.linkDataSource.getLinks(),
 		getContact: async (obj, args, context) => context.dataSources.contactDataSource.getContact(args._id),
-		getContacts: async  (obj, args, context, info ) => context.dataSources.contactDataSource.getContacts()
+		getContacts: async  (obj, args, context, info ) => context.dataSources.contactDataSource.getContacts(),
+		getNumberContacts: async  (obj, args, context, info ) => context.dataSources.contactDataSource.getMaxContacts(),
+		getContactsPagination: async  (obj, args, context, info ) =>context.dataSources.contactDataSource.getContactsPagination(args.limit, args.offset)
 	},
 	Mutation: {
 		createContact: async (parent, { input }, context, info) =>context.dataSources.contactDataSource.createContact(input),

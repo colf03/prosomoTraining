@@ -45,10 +45,12 @@ input ContactInput {
 }
 
 type Query {
-    getLink (_id: ID!): Link
-    getLinks: [Link]
-    getContact (_id: ID!): Contact
-    getContacts (limit: Int, offset: Int): [Contact]
+    getLink (_id: ID!) : Link
+    getLinks : [Link]
+    getContact (_id: ID!) : Contact
+    getContacts : [Contact]
+    getContactsPagination (limit: Int, offset: Int) : [Contact]
+	getNumberContacts : Int
 }
 
 type Mutation {

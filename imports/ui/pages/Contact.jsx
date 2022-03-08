@@ -7,6 +7,7 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
+	Button,
 	Paper,
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,9 +31,15 @@ const GET_CONTACTS = gql`
 	}
 `;
 
+const GET_MAX_CONTACTS = gql`
+	query getNumberContacts{
+		getNumberContacts
+	}
+`;
+
 const GET_CONTACTS_PAGINATION = gql`
-	query getContacts($limit: Int, $offset: Int){
-		getContacts( limit: $limit, offset: $offset){
+	query getContactsPagination($limit: Int, $offset: Int){
+		getContactsPagination(limit: $limit, offset: $offset ){
 			_id
 			firstName
 			lastName
@@ -54,17 +61,39 @@ const DELETE_CONTACT = gql`
 `;
 
 const Contact = () => {
-	const OFFSET = 0;
-	const ITEMS_PER_PAGE = 5;
+	const [offset, setOffset] = useState(0);
+	const items_per_page = 5;
+	const actual_page=1;
+	const allPage = [1];
 
-	const  { loading, error, data, refetch }  = useQuery(GET_CONTACTS);
+	let  { loading, error, data, refetch } = useQuery(GET_CONTACTS_PAGINATION, { variables : { 'limit' :  items_per_page, 'offset' : offset }});
+	const  maxContact = useQuery(GET_MAX_CONTACTS);
+
+	if(maxContact?.data?.getNumberContacts){
+		var currentPage=1;
+		for (var i = items_per_page; i < maxContact.data.getNumberContacts; i=i+items_per_page) {
+			allPage.push(currentPage+1);
+			currentPage++;
+
+		}
+
+	}
+
+
 	const [deleteContactMutation, { dataDelete, loadingDelete, errorDelete }] = useMutation(DELETE_CONTACT);
 
 
+
 	useEffect(() => {}, []);
+
+
 	function deleteContact(id) {
 		deleteContactMutation({ variables: { id: id } });
 		refetch();
+	}
+
+	function switchPage(page) {
+		setOffset((page-1)*5);
 	}
 
 	return (
@@ -91,7 +120,7 @@ const Contact = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{data?.contacts?.map((row) => (
+							{data?.getContactsPagination?.map((row) => (
 								<TableRow
 									key={"contact_" + row._id}
 									id={row._id}
@@ -157,6 +186,20 @@ const Contact = () => {
 						</TableBody>
 					</Table>
 				</TableContainer>
+				<div className='pageContainer'>
+					{allPage.map((row) => (
+						<span key={row}>
+							<Button
+								className="page"
+								variant="contained"
+								style={{maxWidth: '30px', maxHeight: '30px', minWidth: '30px', minHeight: '30px'}}
+								onClick={() =>switchPage(row)}
+							>{row} </Button>
+						</span>
+
+					))}
+				</div>
+
 			</div>
 		</>
 	);
