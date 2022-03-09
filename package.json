@@ -26,6 +26,7 @@
     "cross-fetch": "^3.1.5",
     "graphql": "^15.8.0",
     "ioredis": "^4.28.5",
+    "lodash": "^4.17.21",
     "meteor-node-stubs": "^1.1.0",
     "mongodb": "^4.4.0",
     "mui-image": "^1.0.4",

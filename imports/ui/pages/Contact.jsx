@@ -66,7 +66,8 @@ const Contact = () => {
 	const actual_page=1;
 	const allPage = [1];
 
-	let  { loading, error, data, refetch } = useQuery(GET_CONTACTS_PAGINATION, { variables : { 'limit' :  items_per_page, 'offset' : offset }});
+	let  { loading, error, data} = useQuery(GET_CONTACTS_PAGINATION, { variables : { 'limit' :  items_per_page, 'offset' : offset }, fetchPolicy:"cache-and-network"});
+	const [deleteContactMutation, { dataDelete, loadingDelete, errorDelete }] = useMutation(DELETE_CONTACT, {refetchQueries: [GET_CONTACTS_PAGINATION]});
 	const  maxContact = useQuery(GET_MAX_CONTACTS);
 
 	if(maxContact?.data?.getNumberContacts){
@@ -80,7 +81,7 @@ const Contact = () => {
 	}
 
 
-	const [deleteContactMutation, { dataDelete, loadingDelete, errorDelete }] = useMutation(DELETE_CONTACT);
+
 
 
 
@@ -89,7 +90,6 @@ const Contact = () => {
 
 	function deleteContact(id) {
 		deleteContactMutation({ variables: { id: id } });
-		refetch();
 	}
 
 	function switchPage(page) {
