@@ -62,3 +62,18 @@ nav span a:hover{
 	margin-left: 5px;
 }
 
+.selectContainer{
+
+	margin: 60px 0;
+	max-width: 325px;
+
+}
+
+.totalReport{
+	margin: 40px 0;
+	float: right;
+	border: 0px solid;
+	padding: 10px;
+	border-bottom: 1px solid rgba(224, 224, 224, 1);
+}
+

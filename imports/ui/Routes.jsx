@@ -6,6 +6,8 @@ import {
 	LinkPage,
 	Contact,
 	EditContact,
+	ReportContactProvince,
+	ReportContactPostalCode,
 	FormContact,
 	NotFound,
 } from "./pages";
@@ -19,6 +21,8 @@ const Routes = () => {
 			<Route path="/link/:id" component={LinkPage} />
 			<Route exact path="/contacts" component={Contact}></Route>
 			<Route exact path="/formContact" component={FormContact}></Route>
+			<Route exact path="/reportContactProvince" component={ReportContactProvince}></Route>
+			<Route exact path="/reportContactPostalCode" component={ReportContactPostalCode}></Route>
 			<Route path="/editContact/:id" component={EditContact}></Route>
 			<Route
 					path={"*"}

@@ -17,6 +17,13 @@ type Contact {
     comment : [String]
 }
 
+type ReportContact {
+	 _id: String
+    province : String
+    postalCode : String
+	total : Int!
+}
+
 
 type ContactResult {
 
@@ -50,7 +57,9 @@ type Query {
     getContact (_id: ID!) : Contact
     getContacts : [Contact]
     getContactsPagination (limit: Int, offset: Int) : [Contact]
+    getContactsByProvince (provinces: [String]) : [ReportContact]
 	getNumberContacts : Int
+	getAllProvinces : [String]
 }
 
 type Mutation {

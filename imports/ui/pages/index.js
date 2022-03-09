@@ -5,3 +5,5 @@ export { default as FormContact } from "./FormContact";
 export { default as EditContact } from "./EditContact";
 export { default as Hello } from "./Hello";
 export { default as NotFound } from "./NotFound";
+export { default as ReportContactPostalCode } from "./reports/ContactByPostalCode";
+export { default as ReportContactProvince } from "./reports/ContactByProvince";

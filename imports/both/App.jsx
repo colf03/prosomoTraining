@@ -26,6 +26,12 @@ export default function App({ client, location, context = {} }) {
 						<span>
 							<Link to="/formContact">Ajouter un Contact</Link>
 						</span>
+						<span>
+							<Link to="/reportContactProvince">Rapport des contacts par province</Link>
+						</span>
+						<span>
+							<Link to="/reportContactPostalCode">Rapport des contacts par code postal</Link>
+						</span>
 					</nav>
 					<Routes />
 				</Router>
