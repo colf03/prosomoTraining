@@ -5,7 +5,7 @@ export default class Link extends MongoDataSource {
 
 
   async getLink(id) {
-    return this.findOneById(id, { ttl: 60 });
+    return this.findOneById(id);
   }
 
   async getLinks() {

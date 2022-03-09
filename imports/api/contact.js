@@ -1,6 +1,6 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb';
 import { ObjectId } from "mongodb";
-const MINUTE = 60
+import  {clearCacheById} from "./Cache.js";
 export default class Contact extends MongoDataSource {
 
 
@@ -24,8 +24,7 @@ export default class Contact extends MongoDataSource {
 	}
 
 	async updateContact (id, contact){
-		this.deleteFromCacheById(id);
-		this.deleteFromCacheByFields({ _id: ObjectId(id)});
+		clearCacheById(this, id);
 		this.collection.updateOne({ _id: ObjectId(id)}, {$set: contact});
 		return (this.findOneById(id));
 	}
@@ -37,8 +36,7 @@ export default class Contact extends MongoDataSource {
 
 	async deleteContact(id) {
 		this.collection.deleteOne({ _id: ObjectId(id) });
-		this.deleteFromCacheById(id);
-		this.deleteFromCacheByFields({ _id: ObjectId(id)});
+		clearCacheById(this, id);
 		return "Contact deleted";
 
 	}

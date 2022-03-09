@@ -66,56 +66,78 @@ const args = {
 */
 
 const validator = (model) => {
-  let regexPhone= new RegExp("^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}");
-  let regexPostalCode = new RegExp(/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i);
-  let regexEmail = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)
-  const details = [];
-  if (!model.firstName)
-    details.push({
-      name: "firstName",
-      message: "Vous devez rentrer un prénom.",
-    });
+	let regexPhone = new RegExp(
+		"^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}"
+	);
+	let regexPostalCode = new RegExp(
+		/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i
+	);
+	let regexEmail = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g);
+	const details = [];
+	if (!model.firstName)
+		details.push({
+			name: "firstName",
+			message: "Vous devez rentrer un prénom.",
+		});
 
-  if (!model.lastName)
-    details.push({ name: "lastName", message: "Vous devez rentrer un nom." });
+	if (!model.lastName)
+		details.push({
+			name: "lastName",
+			message: "Vous devez rentrer un nom.",
+		});
 
-  if (!model.email)
-    details.push({ name: "email", message: "Vous devez rentrer un courriel." });
-  else if (!regexEmail.test(model.email))
-    details.push({ name: "email", message: "Vous avez rentrer un courriel invalide." });
+	if (!model.email)
+		details.push({
+			name: "email",
+			message: "Vous devez rentrer un courriel.",
+		});
+	else if (!regexEmail.test(model.email))
+		details.push({
+			name: "email",
+			message: "Vous avez rentrer un courriel invalide.",
+		});
 
+	if (!model.phone)
+		details.push({
+			name: "phone",
+			message: "Vous devez rentrer un numéro de téléphone.",
+		});
+	else if (!regexPhone.test(model.phone))
+		details.push({
+			name: "phone",
+			message: "Vous avez rentrer un numéro de téléphone invalide.",
+		});
 
-  if (!model.phone)
-    details.push({
-      name: "phone",
-      message: "Vous devez rentrer un numéro de téléphone.",
-    });
+	if (!model.city)
+		details.push({
+			name: "city",
+			message: "Vous devez rentrer une ville.",
+		});
 
-  else if(!regexPhone.test(model.phone))
-    details.push({ name: "phone", message: "Vous avez rentrer un numéro de téléphone invalide." });
+	if (!model.province)
+		details.push({
+			name: "province",
+			message: "Vous devez rentrer une province.",
+		});
 
-  if (!model.city)
-    details.push({ name: "city", message: "Vous devez rentrer une ville." });
+	if (!model.postalCode)
+		details.push({
+			name: "postalCode",
+			message: "Vous devez rentrer un code postal.",
+		});
+	else if (!regexPostalCode.test(model.postalCode))
+		details.push({
+			name: "postalCode",
+			message: "Vous avez rentrer un code postal invalide.",
+		});
 
-  if (!model.province)
-    details.push({
-      name: "province",
-      message: "Vous devez rentrer une province.",
-    });
+	if (!model.country)
+		details.push({
+			name: "country",
+			message: "Vous devez rentrer un pays.",
+		});
 
-  if (!model.postalCode)
-    details.push({
-      name: "postalCode",
-      message: "Vous devez rentrer un code postal.",
-    });
-
-  else if (!regexPostalCode.test(model.postalCode))
-    details.push({ name: "postalCode", message: "Vous avez rentrer un code postal invalide." });
-
-  if (!model.country)
-    details.push({ name: "country", message: "Vous devez rentrer un pays." });
-
-  if (details.length) return { details };
+	if (details.length) return { details };
 };
 
 const type = buildASTSchema(parse(schema)).getType("Contact");

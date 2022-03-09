@@ -77,7 +77,6 @@ const EditContact = () => {
 					schema={schema}
 					model={data?.getContact ? data.getContact : []}
 					onSubmit={(value) => {
-						delete value["__typename"];
 						updateContact({
 							variables: { id: id, input: value },
 						});
