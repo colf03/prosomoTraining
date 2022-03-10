@@ -23,6 +23,8 @@ const resolvers = {
 		getNumberContacts: async  (obj, args, context, info ) => context.dataSources.contactDataSource.getMaxContacts(),
 		getAllProvinces: async  (obj, args, context, info ) => context.dataSources.contactDataSource.getAllProvinces(),
 		getContactsByProvince: async  (obj, args, context, info ) =>context.dataSources.contactDataSource.getContactsByProvince(args.provinces),
+		getAllPostalCodes: async  (obj, args, context, info ) => context.dataSources.contactDataSource.getAllPostalCodes(),
+		getContactsByPostalCode: async  (obj, args, context, info ) =>context.dataSources.contactDataSource.getContactsByPostalCode(args.postalCodes),
 		getContactsPagination: async  (obj, args, context, info ) =>context.dataSources.contactDataSource.getContactsPagination(args.limit, args.offset)
 	},
 	Mutation: {

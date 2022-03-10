@@ -58,8 +58,10 @@ type Query {
     getContacts : [Contact]
     getContactsPagination (limit: Int, offset: Int) : [Contact]
     getContactsByProvince (provinces: [String]) : [ReportContact]
+    getContactsByPostalCode (postalCodes: [String]) : [ReportContact]
 	getNumberContacts : Int
 	getAllProvinces : [String]
+	getAllPostalCodes : [String]
 }
 
 type Mutation {

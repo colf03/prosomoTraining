@@ -4,21 +4,8 @@ import { bridge as schema } from "../../apollo/contactSchema";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import { refetch } from "./Contact.jsx";
 import { Helmet } from "react-helmet-async";
-const ADD_CONTACT = gql`
-	mutation CreateContact($input: ContactInput) {
-		createContact(input: $input) {
-			firstName
-			lastName
-			email
-			phone
-			city
-			province
-			postalCode
-			country
-			comment
-		}
-	}
-`;
+
+import {ADD_CONTACT} from "../../apollo/contactQuery";
 
 const FormContact = () => {
 	const [addContact, { data, loading, error }] = useMutation(ADD_CONTACT);

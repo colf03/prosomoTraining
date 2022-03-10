@@ -35,12 +35,33 @@ export default class Contact extends MongoDataSource {
 		return result;
 	}
 
+	async getContactsByPostalCode(postalcodes) {
+		let result = [];
+		let match = {};
+
+		if (postalcodes.length) {
+			if (_.indexOf(postalcodes, "all") == -1) {
+				match = { postalCode: { $in: postalcodes } };
+			}
+			result = this.collection.aggregate([
+				{ $match: match} ,
+				{ $group: { _id: "$postalCode" , postalCode: { $first: '$postalCode' }, total: { $sum:1 } } },
+				{ $sort : { postalCode : 1 } }
+			]).toArray();
+		}
+		return result;
+	}
+
 	async getMaxContacts() {
 		var res = await this.findByFields({});
 		return res.length;
 	}
 	async getAllProvinces() {
 		return this.collection.distinct("province");
+	}
+
+	async getAllPostalCodes() {
+		return this.collection.distinct("postalCode");
 	}
 
 	async updateContact(id, contact) {

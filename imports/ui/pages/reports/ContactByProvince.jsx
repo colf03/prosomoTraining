@@ -23,22 +23,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 let _ = require('lodash');
 
-const GET_CONTACTS_BY_PROVINCE = gql`
-	query getContactsByProvince($provinces : [String]){
-		getContactsByProvince(provinces: $provinces ){
-			_id
-			province
-			total
-		}
-	}
-`;
-
-
-const GET_ALL_PROVINCE = gql`
-	query getAllProvinces{
-		getAllProvinces
-	}
-`;
+import {GET_ALL_PROVINCE, GET_CONTACTS_BY_PROVINCE} from "../../../apollo/contactQuery";
 
 const ReportContactProvince = () => {
 	const [province, setProvince] = useState([]);
@@ -46,7 +31,7 @@ const ReportContactProvince = () => {
 	const actual_page=1;
 	const allPage = [1];
 
-	let  { loading, error, data} = useQuery(GET_CONTACTS_BY_PROVINCE, {  variables : { 'provinces' :  province}, fetchPolicy:"cache-and-network"});
+	let  { loading, error, data} = useQuery(GET_CONTACTS_BY_PROVINCE, {  variables : { 'provinces' :  province}});
 	const  allProvince = useQuery(GET_ALL_PROVINCE);
 	let options= [{ value: 'all', label: 'Toutes les provinces'}];
 	if(allProvince?.data?.getAllProvinces){

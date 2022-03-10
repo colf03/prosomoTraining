@@ -10,40 +10,29 @@ import {
 	Button,
 	Paper,
 } from "@mui/material";
+import dynamic from 'next/dynamic';
+import Select from 'react-select';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt, faTrashAlt } from "@fortawesome/fontawesome-free-solid";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-const GET_CONTACTS = gql`
-	{
-		contacts: getContacts{
-			_id
-			firstName
-			lastName
-			email
-			phone
-			city
-			province
-			postalCode
-			country
-			comment
-		}
-	}
-`;
-const DELETE_CONTACT = gql`
-	mutation deleteContact($id: ID!) {
-		deleteContact(_id: $id)
-	}
-`;
+let _ = require('lodash');
+import {GET_CONTACTS_BY_POSTAL_CODE, GET_ALL_POSTAL_CODE} from "../../../apollo/contactQuery";
 
 const ReportContactPostalCode = () => {
-	const [offset, setOffset] = useState(0);
+	const [postalcode, setPostalCode] = useState([]);
 	const items_per_page = 5;
 	const actual_page=1;
 	const allPage = [1];
 
-	let  { loading, error, data} = useQuery(GET_CONTACTS, { fetchPolicy:"cache-and-network"});
-	const [deleteContactMutation, { dataDelete, loadingDelete, errorDelete }] = useMutation(DELETE_CONTACT, {refetchQueries: [GET_CONTACTS]});
+	let  { loading, error, data} = useQuery(GET_CONTACTS_BY_POSTAL_CODE, {  variables : { 'postalCodes' :  postalcode}});
+	const  allPostalCode = useQuery(GET_ALL_POSTAL_CODE);
+	let options= [{ value: 'all', label: 'Tous les codes postaux'}];
+	if(allPostalCode?.data?.getAllPostalCodes){
+		allPostalCode?.data?.getAllPostalCodes.map((row) => {
+			options=_.concat(options,[{ value: row, label: row}]);
+		});
+	}
 
 
 
@@ -58,37 +47,44 @@ const ReportContactPostalCode = () => {
 		deleteContactMutation({ variables: { id: id } });
 	}
 
-	function switchPage(page) {
-		setOffset((page-1)*5);
+	const handleSelectChange = (values) => {
+		var arrayPostalCode = [];
+		if(values){
+			values.map((row)=>{
+				arrayPostalCode=_.concat(arrayPostalCode,row.value);
+			});
+		}
+		setPostalCode(arrayPostalCode);
 	}
 
 	return (
 		<>
 			<Helmet>
-				<title>Prosomo : Liste des contacts </title>
+				<title>Prosomo : Rapport Contacts </title>
 				<meta name="description" content="Contact list" />
 			</Helmet>
 			<div>
-				<h2>Liste des contacts : </h2>
+				<h2>Rapport des contacts regroupé par codes postaux : </h2>
+				<div className="selectContainer">
+					<Select
+					onChange={handleSelectChange}
+					instanceId='select_province_contact'
+					options={options}
+					isMulti
+					/>
+				</div>
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 650 }} aria-label="simple table">
 						<TableHead>
 							<TableRow>
-								<TableCell>Nom</TableCell>
-								<TableCell align="left">Courriel</TableCell>
-								<TableCell align="left">téléphone</TableCell>
-								<TableCell align="left">Ville</TableCell>
-								<TableCell align="left">Province</TableCell>
 								<TableCell align="left">Code postal</TableCell>
-								<TableCell align="left">Pays </TableCell>
-								<TableCell align="left">Commentaire </TableCell>
-								<TableCell align="left">Action </TableCell>
+								<TableCell align="left">Nombre de contact</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{data?.contacts?.map((row) => (
+							{data?.getContactsByPostalCode?.map((row) => (
 								<TableRow
-									key={"contact_" + row._id}
+									key={"repportPostalCode_" + row._id}
 									id={row._id}
 									sx={{
 										"&:last-child td, &:last-child th": {
@@ -97,61 +93,26 @@ const ReportContactPostalCode = () => {
 									}}
 								>
 									<TableCell component="th" scope="row">
-										{row.firstName} {row.lastName}
-									</TableCell>
-									<TableCell align="left">
-										{row.email}
-									</TableCell>
-									<TableCell align="left">
-										{row.phone}
-									</TableCell>
-									<TableCell align="left">
-										{row.city}
-									</TableCell>
-									<TableCell align="left">
-										{row.province}
-									</TableCell>
-									<TableCell align="left">
 										{row.postalCode}
 									</TableCell>
 									<TableCell align="left">
-										{row.country}
-									</TableCell>
-									<TableCell align="left">
-										{row.comment?.map((value, k) => (
-											<li key={row._id + "_" + k}>
-												{value}
-											</li>
-										))}
-									</TableCell>
-									<TableCell>
-										<Link to={"/editContact/" + row._id}>
-											<span
-												className="editContact"
-												title="Modifier le contact"
-											>
-												<FontAwesomeIcon
-													icon={faPencilAlt}
-												/>
-											</span>
-										</Link>
-										<span
-											className="editContact"
-											title="Supprimer le contact"
-											onClick={() =>
-												deleteContact(row._id)
-											}
-										>
-											<FontAwesomeIcon
-												icon={faTrashAlt}
-											/>
-										</span>
+										{row.total}
 									</TableCell>
 								</TableRow>
 							))}
 						</TableBody>
 					</Table>
 				</TableContainer>
+				<div className="totalReport">
+					<span>
+						Total :&nbsp;
+					{data? (
+						_.sumBy(data.getContactsByPostalCode,"total")
+					) : (
+						0
+					)}
+					</span>
+				</div>
 			</div>
 		</>
 	);

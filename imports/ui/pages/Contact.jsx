@@ -14,51 +14,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt, faTrashAlt } from "@fortawesome/fontawesome-free-solid";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-const GET_CONTACTS = gql`
-	{
-		contacts: getContacts{
-			_id
-			firstName
-			lastName
-			email
-			phone
-			city
-			province
-			postalCode
-			country
-			comment
-		}
-	}
-`;
+import {GET_CONTACTS_PAGINATION, GET_MAX_CONTACTS, DELETE_CONTACT, queriesToReftech} from "../../apollo/contactQuery";
 
-const GET_MAX_CONTACTS = gql`
-	query getNumberContacts{
-		getNumberContacts
-	}
-`;
-
-const GET_CONTACTS_PAGINATION = gql`
-	query getContactsPagination($limit: Int, $offset: Int){
-		getContactsPagination(limit: $limit, offset: $offset ){
-			_id
-			firstName
-			lastName
-			email
-			phone
-			city
-			province
-			postalCode
-			country
-			comment
-		}
-	}
-`;
-
-const DELETE_CONTACT = gql`
-	mutation deleteContact($id: ID!) {
-		deleteContact(_id: $id)
-	}
-`;
 
 const Contact = () => {
 	const [offset, setOffset] = useState(0);
@@ -66,8 +23,12 @@ const Contact = () => {
 	const actual_page=1;
 	const allPage = [1];
 
-	let  { loading, error, data} = useQuery(GET_CONTACTS_PAGINATION, { variables : { 'limit' :  items_per_page, 'offset' : offset }, fetchPolicy:"cache-and-network"});
-	const [deleteContactMutation, { dataDelete, loadingDelete, errorDelete }] = useMutation(DELETE_CONTACT, {refetchQueries: [GET_CONTACTS_PAGINATION]});
+	let  { loading, error, data} = useQuery(GET_CONTACTS_PAGINATION, { variables : { 'limit' :  items_per_page, 'offset' : offset }});
+	const [deleteContactMutation, { dataDelete, loadingDelete, errorDelete }] = useMutation(DELETE_CONTACT, {refetchQueries: GET_CONTACTS_PAGINATION,update(cache) {
+		queriesToReftech.map(row =>{
+			cache.evict({ id: 'ROOT_QUERY', fieldName: row });
+		});
+	   }});
 	const  maxContact = useQuery(GET_MAX_CONTACTS);
 
 	if(maxContact?.data?.getNumberContacts){

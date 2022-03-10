@@ -7,37 +7,7 @@ import { refetch } from "./Contact.jsx";
 import { useHistory  } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import  ContactModel  from "./../../model/Contact";
-const GET_CONTACT = gql`
-	query GetContact($id: ID!) {
-		getContact(_id: $id) {
-			firstName
-			lastName
-			email
-			phone
-			city
-			province
-			postalCode
-			country
-			comment
-		}
-	}
-`;
-
-const UPDATE_CONTACT = gql`
-	mutation UpdateContact($id: ID!, $input: ContactInput) {
-		updateContact(id: $id, input: $input) {
-			firstName
-			lastName
-			email
-			phone
-			city
-			province
-			postalCode
-			country
-			comment
-		}
-	}
-`;
+import {GET_CONTACT, UPDATE_CONTACT, queriesToReftech} from "../../apollo/contactQuery";
 
 const EditContact = () => {
 	const [send, setSended] = useState("");
@@ -62,7 +32,11 @@ const EditContact = () => {
 		if (error != undefined)
 			history.push("/404");
 	}, [error]);
-	const [updateContact, { dataUpdate, loadingUpdate, errorUpdate }] = useMutation(UPDATE_CONTACT, {refetchQueries: [GET_CONTACT]});
+	const [updateContact, { dataUpdate, loadingUpdate, errorUpdate }] = useMutation(UPDATE_CONTACT,{update(cache) {
+		queriesToReftech.map(row =>{
+			cache.evict({ id: 'ROOT_QUERY', fieldName: row });
+		});
+	   }});
 
 	return (
 		<>
